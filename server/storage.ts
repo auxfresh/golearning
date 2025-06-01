@@ -87,7 +87,7 @@ export class MemStorage implements IStorage {
       id: this.currentUserId++,
       username: "admin",
       email: "ayatullahiayobami@gmail.com",
-      firebaseUid: "admin-firebase-uid", // This will be updated when the user signs up
+      firebaseUid: "hjYCaVhTM3b94AMAawHL96rDZYV2", // This will be updated when the user signs up
       displayName: "Admin User",
       avatar: null,
       isInstructor: true,
