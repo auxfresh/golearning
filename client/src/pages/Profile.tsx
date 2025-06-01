@@ -23,7 +23,8 @@ import {
   X,
   Calendar,
   Award,
-  TrendingUp
+  TrendingUp,
+  Users
 } from "lucide-react";
 import { UserAchievement, Achievement, Course } from "@shared/schema";
 
