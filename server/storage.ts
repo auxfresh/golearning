@@ -12,6 +12,7 @@ export interface IStorage {
   // Users
   getUserByFirebaseUid(firebaseUid: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(userId: number, updates: Partial<User>): Promise<User>;
   updateUserXP(userId: number, xp: number): Promise<User>;
   updateUserStreak(userId: number, streak: number): Promise<User>;
   getLeaderboard(limit?: number): Promise<User[]>;
@@ -186,6 +187,15 @@ export class MemStorage implements IStorage {
     };
     this.users.set(id, user);
     return user;
+  }
+
+  async updateUser(userId: number, updates: Partial<User>): Promise<User> {
+    const user = this.users.get(userId);
+    if (!user) throw new Error("User not found");
+
+    const updatedUser = { ...user, ...updates };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
   }
 
   async updateUserXP(userId: number, xp: number): Promise<User> {

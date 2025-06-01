@@ -229,14 +229,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Invalid user ID" });
       }
 
-      const updatedUser = await storage.updateUser(userId, { isInstructor: true });
-      if (!updatedUser) {
-        return res.status(404).json({ error: "User not found" });
-      }
+      const updatedUser = await storage.updateUser(userId, { 
+        isInstructor: true,
+        role: "instructor" 
+      });
 
       res.json(updatedUser);
     } catch (error) {
       console.error("Error promoting user to instructor:", error);
+      if (error.message === "User not found") {
+        return res.status(404).json({ error: "User not found" });
+      }
       res.status(500).json({ error: "Failed to promote user" });
     }
   });
