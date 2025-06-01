@@ -45,12 +45,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(userData);
           } else if (response.status === 404) {
             // Create new user
+            const isAdmin = firebaseUser.email === 'ayatullahiayobami@gmail.com';
             const newUserData = {
               username: firebaseUser.email?.split('@')[0] || 'user',
               email: firebaseUser.email || '',
               firebaseUid: firebaseUser.uid,
               displayName: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
               avatar: firebaseUser.photoURL,
+              role: isAdmin ? 'admin' : 'student',
+              isInstructor: isAdmin,
             };
             
             const createResponse = await apiRequest('POST', '/api/users', newUserData);

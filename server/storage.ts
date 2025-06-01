@@ -15,6 +15,7 @@ export interface IStorage {
   updateUser(userId: number, updates: Partial<User>): Promise<User>;
   updateUserXP(userId: number, xp: number): Promise<User>;
   updateUserStreak(userId: number, streak: number): Promise<User>;
+  getAllUsers(): Promise<User[]>;
   getLeaderboard(limit?: number): Promise<User[]>;
 
   // Courses
@@ -81,6 +82,23 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
+    // Seed admin user
+    const adminUser: User = {
+      id: this.currentUserId++,
+      username: "admin",
+      email: "ayatullahiayobami@gmail.com",
+      firebaseUid: "admin-firebase-uid", // This will be updated when the user signs up
+      displayName: "Admin User",
+      avatar: null,
+      isInstructor: true,
+      level: 1,
+      xp: 0,
+      streak: 0,
+      role: "admin",
+      createdAt: new Date(),
+    };
+    this.users.set(adminUser.id, adminUser);
+
     // Seed achievements
     const achievementData = [
       { title: "First Steps", description: "Complete your first lesson", icon: "fas fa-baby", type: "lesson_completion", requirement: 1 },
@@ -217,6 +235,12 @@ export class MemStorage implements IStorage {
     const updatedUser = { ...user, streak };
     this.users.set(userId, updatedUser);
     return updatedUser;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.users.values()).sort((a, b) => 
+      a.displayName.localeCompare(b.displayName)
+    );
   }
 
   async getLeaderboard(limit: number = 10): Promise<User[]> {

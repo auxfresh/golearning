@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Home, BookOpen, TrendingUp, Trophy, User, GraduationCap } from "lucide-react";
+import { Home, BookOpen, TrendingUp, Trophy, User, GraduationCap, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/lib/hooks/useUser";
 

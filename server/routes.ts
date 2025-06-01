@@ -221,6 +221,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin routes
+  app.get("/api/admin/users", async (req, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching all users:", error);
+      res.status(500).json({ error: "Failed to fetch users" });
+    }
+  });
+
   // Promote user to instructor (admin only)
   app.patch("/api/users/:userId/promote-instructor", async (req, res) => {
     try {
@@ -237,6 +248,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(updatedUser);
     } catch (error) {
       console.error("Error promoting user to instructor:", error);
+      if (error.message === "User not found") {
+        return res.status(404).json({ error: "User not found" });
+      }
+      res.status(500).json({ error: "Failed to promote user" });
+    }
+  });
+
+  // Promote user to admin (admin only)
+  app.patch("/api/users/:userId/promote-admin", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      if (isNaN(userId)) {
+        return res.status(400).json({ error: "Invalid user ID" });
+      }
+
+      const updatedUser = await storage.updateUser(userId, { 
+        isInstructor: true,
+        role: "admin" 
+      });
+
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error promoting user to admin:", error);
       if (error.message === "User not found") {
         return res.status(404).json({ error: "User not found" });
       }

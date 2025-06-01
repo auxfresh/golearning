@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { Search, GraduationCap, Menu } from "lucide-react";
+import { Search, GraduationCap, Menu, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -74,6 +74,15 @@ export default function Navigation() {
                   <a href="/instructor" className="flex items-center space-x-2">
                     <GraduationCap className="h-4 w-4" />
                     <span>Instructor</span>
+                  </a>
+                </Button>
+              )}
+
+              {user?.role === "admin" && (
+                <Button variant="ghost" asChild>
+                  <a href="/admin" className="flex items-center space-x-2">
+                    <Shield className="h-4 w-4" />
+                    <span>Admin</span>
                   </a>
                 </Button>
               )}
