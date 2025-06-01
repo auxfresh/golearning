@@ -13,6 +13,7 @@ import CourseDetail from "@/pages/CourseDetail";
 import Community from "@/pages/Community";
 import Achievements from "@/pages/Achievements";
 import Profile from "@/pages/Profile";
+import InstructorDashboard from "@/pages/InstructorDashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -53,6 +54,12 @@ function Router() {
       <Route path="/profile">
         <ProtectedRoute>
           <Profile />
+        </ProtectedRoute>
+      </Route>
+      
+      <Route path="/instructor">
+        <ProtectedRoute>
+          <InstructorDashboard />
         </ProtectedRoute>
       </Route>
       

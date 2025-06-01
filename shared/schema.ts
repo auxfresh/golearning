@@ -12,6 +12,7 @@ export const users = pgTable("users", {
   level: integer("level").notNull().default(1),
   xp: integer("xp").notNull().default(0),
   streak: integer("streak").notNull().default(0),
+  role: text("role").notNull().default("student"), // student, instructor, admin
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
