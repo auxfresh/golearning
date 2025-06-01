@@ -232,6 +232,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update admin user Firebase UID
+  app.patch("/api/admin/update-firebase-uid", async (req, res) => {
+    try {
+      const { email, firebaseUid } = req.body;
+      
+      if (email !== 'ayatullahiayobami@gmail.com') {
+        return res.status(403).json({ error: "Not authorized" });
+      }
+
+      const updatedUser = await storage.updateAdminFirebaseUid(email, firebaseUid);
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating admin Firebase UID:", error);
+      res.status(500).json({ error: "Failed to update Firebase UID" });
+    }
+  });
+
   // Promote user to instructor (admin only)
   app.patch("/api/users/:userId/promote-instructor", async (req, res) => {
     try {

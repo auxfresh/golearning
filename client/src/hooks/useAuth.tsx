@@ -44,8 +44,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const userData = await response.json();
             setUser(userData);
           } else if (response.status === 404) {
-            // Create new user
+            // Check if this is the admin user by email
             const isAdmin = firebaseUser.email === 'ayatullahiayobami@gmail.com';
+            
+            if (isAdmin) {
+              // Update the existing admin user with the correct Firebase UID
+              try {
+                const updateResponse = await fetch('/api/admin/update-firebase-uid', {
+                  method: 'PATCH',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    email: firebaseUser.email,
+                    firebaseUid: firebaseUser.uid,
+                  }),
+                  credentials: "include",
+                });
+                
+                if (updateResponse.ok) {
+                  const userData = await updateResponse.json();
+                  setUser(userData);
+                  return;
+                }
+              } catch (error) {
+                console.error('Error updating admin Firebase UID:', error);
+              }
+            }
+            
+            // Create new user
             const newUserData = {
               username: firebaseUser.email?.split('@')[0] || 'user',
               email: firebaseUser.email || '',
