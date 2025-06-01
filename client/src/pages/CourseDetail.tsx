@@ -99,6 +99,8 @@ export default function CourseDetail() {
   };
 
   const getLevelColor = (level: string) => {
+    if (!level) return "bg-gray-100 text-gray-800";
+    
     switch (level.toLowerCase()) {
       case "beginner":
         return "bg-green-100 text-green-800";
