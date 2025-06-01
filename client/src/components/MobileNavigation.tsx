@@ -1,11 +1,11 @@
 import { Link, useLocation } from "wouter";
 import { Home, BookOpen, TrendingUp, Trophy, User, GraduationCap, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/lib/hooks/useUser";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function MobileNavigation() {
   const [location] = useLocation();
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
