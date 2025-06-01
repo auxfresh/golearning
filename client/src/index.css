@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 13% 45%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 84% 4.9%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 84% 4.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 84% 4.9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --ring: 222 84% 4.9%;
+  --radius: 0.5rem;
+  --chart-1: 207 90% 54%;
+  --chart-2: 270 95% 75%;
+  --chart-3: 54 91% 68%;
+  --chart-4: 31 80% 56%;
+  --chart-5: 339 82% 67%;
+  
+  /* Custom colors matching the design reference */
+  --learning-blue: 207 90% 54%;
+  --success-green: 158 64% 52%;
+  --achievement-gold: 43 96% 56%;
+  --neutral-light: 210 20% 98%;
+  --neutral-medium: 215 16% 47%;
+  --neutral-dark: 222 47% 11%;
+}
+
+.dark {
+  --background: 222 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --popover: 222 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --card: 222 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --primary: 207 90% 54%;
+  --primary-foreground: 222 84% 4.9%;
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --accent: 217 33% 17%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 210 40% 98%;
+  --ring: 212 95% 68%;
+  --chart-1: 207 90% 54%;
+  --chart-2: 270 95% 75%;
+  --chart-3: 54 91% 68%;
+  --chart-4: 31 80% 56%;
+  --chart-5: 339 82% 67%;
+  
+  /* Custom colors for dark mode */
+  --learning-blue: 207 90% 54%;
+  --success-green: 158 64% 52%;
+  --achievement-gold: 43 96% 56%;
+  --neutral-light: 217 33% 17%;
+  --neutral-medium: 215 20% 65%;
+  --neutral-dark: 210 40% 98%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+  }
+}
+
+@layer utilities {
+  .text-learning-blue {
+    color: hsl(var(--learning-blue));
+  }
+  
+  .bg-learning-blue {
+    background-color: hsl(var(--learning-blue));
+  }
+  
+  .text-success-green {
+    color: hsl(var(--success-green));
+  }
+  
+  .bg-success-green {
+    background-color: hsl(var(--success-green));
+  }
+  
+  .text-achievement-gold {
+    color: hsl(var(--achievement-gold));
+  }
+  
+  .bg-achievement-gold {
+    background-color: hsl(var(--achievement-gold));
+  }
+  
+  .text-neutral-light {
+    color: hsl(var(--neutral-light));
+  }
+  
+  .bg-neutral-light {
+    background-color: hsl(var(--neutral-light));
+  }
+  
+  .text-neutral-medium {
+    color: hsl(var(--neutral-medium));
+  }
+  
+  .bg-neutral-medium {
+    background-color: hsl(var(--neutral-medium));
+  }
+  
+  .text-neutral-dark {
+    color: hsl(var(--neutral-dark));
+  }
+  
+  .bg-neutral-dark {
+    background-color: hsl(var(--neutral-dark));
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* Smooth transitions for interactive elements */
+@layer components {
+  .hover-lift {
+    @apply transition-transform duration-200 ease-in-out;
+  }
+  
+  .hover-lift:hover {
+    @apply transform -translate-y-1;
+  }
+  
+  .gradient-learning {
+    background: linear-gradient(135deg, hsl(var(--learning-blue)) 0%, hsl(270 95% 75%) 100%);
+  }
+  
+  .gradient-success {
+    background: linear-gradient(135deg, hsl(var(--success-green)) 0%, hsl(158 64% 62%) 100%);
+  }
+  
+  .gradient-achievement {
+    background: linear-gradient(135deg, hsl(var(--achievement-gold)) 0%, hsl(31 80% 56%) 100%);
+  }
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Animation for loading states */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom focus styles for accessibility */
+.focus-visible:focus-visible {
+  @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+}
+
+/* Responsive video container */
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+}
+
+/* Print styles for course materials */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    @apply text-black bg-white;
+  }
+  
+  .print-break {
+    page-break-before: always;
+  }
+}
