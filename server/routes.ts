@@ -180,6 +180,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/users/:userId/weekly-progress", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const weeklyProgress = await storage.getUserWeeklyProgress(userId);
+      res.json(weeklyProgress);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get weekly progress" });
+    }
+  });
+
   // Forum routes
   app.get("/api/forum", async (req, res) => {
     try {

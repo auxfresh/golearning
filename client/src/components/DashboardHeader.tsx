@@ -9,17 +9,13 @@ export default function DashboardHeader() {
     enabled: !!user,
   });
 
-  if (!user) return null;
+  const { data: weeklyData = [] } = useQuery({
+    queryKey: ['/api/users', user?.id, 'weekly-progress'],
+    enabled: !!user,
+    refetchInterval: 30000, // Refetch every 30 seconds for realtime updates
+  });
 
-  const weeklyData = [
-    { day: "Mon", hours: 2, progress: 80 },
-    { day: "Tue", hours: 3, progress: 100 },
-    { day: "Wed", hours: 1.5, progress: 60 },
-    { day: "Thu", hours: 2.5, progress: 90 },
-    { day: "Fri", hours: 1, progress: 40 },
-    { day: "Sat", hours: 0, progress: 0 },
-    { day: "Sun", hours: 0, progress: 0 },
-  ];
+  if (!user) return null;
 
   return (
     <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8 lg:py-12">
@@ -56,7 +52,7 @@ export default function DashboardHeader() {
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
             <h3 className="text-lg font-semibold mb-4">Weekly Progress</h3>
             <div className="space-y-3">
-              {weeklyData.map((day) => (
+              {weeklyData.length > 0 ? weeklyData.map((day) => (
                 <div key={day.day} className="flex items-center justify-between">
                   <span className="text-sm">{day.day}</span>
                   <div className="flex-1 mx-3 bg-white/20 rounded-full h-2">
@@ -67,7 +63,11 @@ export default function DashboardHeader() {
                   </div>
                   <span className="text-xs">{day.hours}h</span>
                 </div>
-              ))}
+              )) : (
+                <div className="text-center text-sm opacity-75">
+                  Complete lessons to track your progress!
+                </div>
+              )}
             </div>
           </div>
         </div>

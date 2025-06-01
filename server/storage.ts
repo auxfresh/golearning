@@ -50,6 +50,8 @@ export interface IStorage {
   // Quiz Attempts
   createQuizAttempt(attempt: InsertQuizAttempt): Promise<QuizAttempt>;
   getUserQuizAttempts(userId: number, quizId: number): Promise<QuizAttempt[]>;
+
+  getUserWeeklyProgress(userId: number): Promise<{ day: string; hours: number; progress: number; }[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -62,7 +64,7 @@ export class MemStorage implements IStorage {
   private userAchievements: Map<number, UserAchievement> = new Map();
   private forumPosts: Map<number, ForumPost> = new Map();
   private quizAttempts: Map<number, QuizAttempt> = new Map();
-  
+
   private currentUserId = 1;
   private currentCourseId = 1;
   private currentLessonId = 1;
@@ -189,10 +191,10 @@ export class MemStorage implements IStorage {
   async updateUserXP(userId: number, xp: number): Promise<User> {
     const user = this.users.get(userId);
     if (!user) throw new Error("User not found");
-    
+
     const newXP = user.xp + xp;
     const newLevel = Math.floor(newXP / 1000) + 1;
-    
+
     const updatedUser = { ...user, xp: newXP, level: newLevel };
     this.users.set(userId, updatedUser);
     return updatedUser;
@@ -201,16 +203,53 @@ export class MemStorage implements IStorage {
   async updateUserStreak(userId: number, streak: number): Promise<User> {
     const user = this.users.get(userId);
     if (!user) throw new Error("User not found");
-    
+
     const updatedUser = { ...user, streak };
     this.users.set(userId, updatedUser);
     return updatedUser;
   }
 
-  async getLeaderboard(limit = 10): Promise<User[]> {
-    return Array.from(this.users.values())
+  async getLeaderboard(limit: number = 10): Promise<User[]> {
+    const allUsers = Array.from(this.users.values());
+    return allUsers
       .sort((a, b) => b.xp - a.xp)
       .slice(0, limit);
+  }
+
+  async getUserWeeklyProgress(userId: number) {
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay()); // Start of current week (Sunday)
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const weeklyData = [];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    for (let i = 0; i < 7; i++) {
+      const currentDay = new Date(startOfWeek);
+      currentDay.setDate(startOfWeek.getDate() + i);
+
+      // Get completed lessons for this day
+      const dayProgress = Array.from(this.userProgress.values()).filter(progress => 
+        progress.userId === userId && 
+        progress.completed && 
+        progress.completedAt &&
+        new Date(progress.completedAt).toDateString() === currentDay.toDateString()
+      );
+
+      // Calculate study hours (assuming 30 minutes per lesson on average)
+      const studyHours = dayProgress.length * 0.5;
+      const maxHours = 4; // Maximum expected hours per day for progress bar
+      const progress = Math.min((studyHours / maxHours) * 100, 100);
+
+      weeklyData.push({
+        day: dayNames[i],
+        hours: studyHours,
+        progress: Math.round(progress)
+      });
+    }
+
+    return weeklyData;
   }
 
   // Courses
@@ -284,9 +323,9 @@ export class MemStorage implements IStorage {
 
   async updateUserProgress(insertProgress: InsertUserProgress): Promise<UserProgress> {
     const existing = await this.getUserProgressByLesson(insertProgress.userId, insertProgress.lessonId);
-    
+
     if (existing) {
-      const updated = { ...existing, ...insertProgress, completedAt: insertProgress.completed ? new Date() : null };
+      const updated = { ...existing, ...insertProgress, completedAt: insertProgress.completed ? new Date() : existing.completedAt };
       this.userProgress.set(existing.id, updated);
       return updated;
     } else {
@@ -304,7 +343,7 @@ export class MemStorage implements IStorage {
   async getUserCompletedCourses(userId: number): Promise<number> {
     const allProgress = Array.from(this.userProgress.values()).filter(p => p.userId === userId && p.completed);
     const courseCompletions = new Map<number, number>();
-    
+
     allProgress.forEach(progress => {
       const count = courseCompletions.get(progress.courseId) || 0;
       courseCompletions.set(progress.courseId, count + 1);
@@ -329,7 +368,7 @@ export class MemStorage implements IStorage {
   async getUserAchievements(userId: number): Promise<(UserAchievement & { achievement: Achievement })[]> {
     const userAchievements = Array.from(this.userAchievements.values())
       .filter(ua => ua.userId === userId);
-    
+
     return userAchievements.map(ua => ({
       ...ua,
       achievement: this.achievements.get(ua.achievementId)!,
@@ -373,7 +412,7 @@ export class MemStorage implements IStorage {
   async likeForumPost(postId: number): Promise<ForumPost> {
     const post = this.forumPosts.get(postId);
     if (!post) throw new Error("Post not found");
-    
+
     const updatedPost = { ...post, likes: post.likes + 1 };
     this.forumPosts.set(postId, updatedPost);
     return updatedPost;
