@@ -1,8 +1,11 @@
 import { Link, useLocation } from "wouter";
-import { Home, BookOpen, TrendingUp, Trophy, User } from "lucide-react";
+import { Home, BookOpen, TrendingUp, Trophy, User, GraduationCap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/lib/hooks/useUser";
 
 export default function MobileNavigation() {
   const [location] = useLocation();
+  const { user } = useUser();
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
@@ -31,6 +34,19 @@ export default function MobileNavigation() {
             </button>
           </Link>
         ))}
+        {user?.isInstructor && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex flex-col items-center space-y-1 h-auto py-2"
+            asChild
+          >
+            <a href="/instructor">
+              <GraduationCap className="h-5 w-5" />
+              <span className="text-xs">Instructor</span>
+            </a>
+          </Button>
+        )}
       </div>
     </nav>
   );

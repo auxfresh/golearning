@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   firebaseUid: text("firebase_uid").notNull().unique(),
   displayName: text("display_name").notNull(),
   avatar: text("avatar"),
+  isInstructor: boolean("is_instructor").default(false).notNull(),
   level: integer("level").notNull().default(1),
   xp: integer("xp").notNull().default(0),
   streak: integer("streak").notNull().default(0),

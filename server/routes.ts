@@ -120,12 +120,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const attemptData = insertQuizAttemptSchema.parse(req.body);
       const attempt = await storage.createQuizAttempt(attemptData);
-      
+
       // Award XP for correct answers
       if (attempt.correct) {
         await storage.updateUserXP(attempt.userId, 50);
       }
-      
+
       res.status(201).json(attempt);
     } catch (error) {
       res.status(400).json({ message: "Invalid quiz attempt data" });
@@ -148,12 +148,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const progressData = insertUserProgressSchema.parse(req.body);
       const progress = await storage.updateUserProgress(progressData);
-      
+
       // Award XP for lesson completion
       if (progressData.completed) {
         await storage.updateUserXP(progressData.userId, 100);
       }
-      
+
       res.json(progress);
     } catch (error) {
       res.status(400).json({ message: "Invalid progress data" });
@@ -218,6 +218,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(post);
     } catch (error) {
       res.status(400).json({ message: "Failed to like post" });
+    }
+  });
+
+  // Promote user to instructor (admin only)
+  app.patch("/api/users/:userId/promote-instructor", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      if (isNaN(userId)) {
+        return res.status(400).json({ error: "Invalid user ID" });
+      }
+
+      const updatedUser = await storage.updateUser(userId, { isInstructor: true });
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error promoting user to instructor:", error);
+      res.status(500).json({ error: "Failed to promote user" });
+    }
+  });
+
+  // Get weekly progress
+  app.get("/api/users/:userId/weekly-progress", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const weeklyProgress = await storage.getUserWeeklyProgress(userId);
+      res.json(weeklyProgress);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get weekly progress" });
     }
   });
 

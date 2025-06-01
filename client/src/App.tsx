@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import InstructorRoute from "@/components/InstructorRoute";
 
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
@@ -59,7 +60,9 @@ function Router() {
       
       <Route path="/instructor">
         <ProtectedRoute>
-          <InstructorDashboard />
+          <InstructorRoute>
+            <InstructorDashboard />
+          </InstructorRoute>
         </ProtectedRoute>
       </Route>
       

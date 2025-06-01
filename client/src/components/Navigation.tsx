@@ -33,7 +33,7 @@ export default function Navigation() {
               <GraduationCap className="text-2xl text-blue-600" />
               <span className="text-xl font-bold text-gray-900">EduLearn</span>
             </Link>
-            
+
             <div className="hidden md:flex space-x-6">
               {navLinks.map((link) => (
                 <Link
@@ -50,7 +50,7 @@ export default function Navigation() {
               ))}
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <div className="hidden sm:block relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -60,7 +60,7 @@ export default function Navigation() {
                 className="pl-10 pr-4 py-2 w-64"
               />
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <div className="hidden md:block text-right">
                 <div className="text-sm font-medium">{user.displayName}</div>
@@ -69,6 +69,14 @@ export default function Navigation() {
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium">
                 {user.displayName.split(' ').map(n => n[0]).join('').toUpperCase()}
               </div>
+              {user?.isInstructor && (
+                <Button variant="ghost" asChild>
+                  <a href="/instructor" className="flex items-center space-x-2">
+                    <GraduationCap className="h-4 w-4" />
+                    <span>Instructor</span>
+                  </a>
+                </Button>
+              )}
               <Button variant="ghost" onClick={logout} className="hidden md:flex">
                 Logout
               </Button>
