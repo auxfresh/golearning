@@ -80,7 +80,7 @@ export default function Leaderboard() {
                 </div>
                 <div className="flex-1">
                   <div className="font-medium text-sm">{user.displayName}</div>
-                  <div className="text-xs text-gray-600">{user.xp.toLocaleString()} XP</div>
+                  <div className="text-xs text-gray-600">{(user.xp || 0).toLocaleString()} XP</div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-medium">Level {user.level}</div>
