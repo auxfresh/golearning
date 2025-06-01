@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { GraduationCap } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { Navigate } from "wouter";
+import { Redirect } from "wouter";
 
 export default function Login() {
   const { user, loading, signInWithGoogle } = useAuth();
@@ -16,7 +16,7 @@ export default function Login() {
   }
 
   if (user) {
-    return <Navigate to="/" />;
+    return <Redirect to="/" />;
   }
 
   return (
