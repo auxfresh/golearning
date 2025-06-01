@@ -12,3 +12,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+
+// Configure Google provider
+googleProvider.addScope('email');
+googleProvider.addScope('profile');
