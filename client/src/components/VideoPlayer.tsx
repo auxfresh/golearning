@@ -117,7 +117,6 @@ export default function VideoPlayer({ videoUrl, title, onProgress, onComplete }:
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
           onEnded={() => onComplete?.()}
-          poster="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
         >
           <source src={videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
